@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Bookmark, Download, Eye, FileText, Loader2, Search } from "lucide-react";
+import { Bookmark, Download, Eye, FileText, Loader2, Pencil, Plus, RotateCcw, Search, Trash2 } from "lucide-react";
+import { EditDialog, useStored } from "@/lib/editable";
 import { ServiceClientTabs } from "@/components/ServiceClientTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -75,10 +76,13 @@ function DocumentsPage() {
   const [sort, setSort] = useState("recent");
   const [preview, setPreview] = useState<Doc | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const [docs, setDocs, resetDocs] = useStored<Doc[]>("rd_documents", DOCUMENTS);
+  const [edit, setEdit] = useState<Doc | null>(null);
+  const cats = DOC_CATEGORIES.filter((c) => c !== "Tous" && c !== "Favoris");
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = DOCUMENTS.filter((d) => {
+    const list = docs.filter((d) => {
       const catOk =
         category === "Tous"
           ? true
@@ -93,7 +97,7 @@ function DocumentsPage() {
       if (sort === "az") return a.title.localeCompare(b.title, "fr");
       return b.title.localeCompare(a.title, "fr");
     });
-  }, [query, category, sort, favorites]);
+  }, [query, category, sort, favorites, docs]);
 
   const openPreview = (doc: Doc) => {
     setPreview(doc);
@@ -109,6 +113,10 @@ function DocumentsPage() {
         <p className="mt-2 text-muted-foreground">
           Catalogues, documentation technique, fiches produits et guides.
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button onClick={() => setEdit({ id: "", title: "", category: cats[0]!, description: "", date: new Date().toISOString().slice(0, 10), format: "PDF", size: "1,0 Mo", pages: 1 })}><Plus className="size-4" /> Ajouter un document</Button>
+          <Button variant="outline" onClick={() => { resetDocs(); toast.success("Documents réinitialisés"); }}><RotateCcw className="size-4" /> Réinitialiser</Button>
+        </div>
       </header>
 
       <div className="space-y-4">
@@ -180,6 +188,9 @@ function DocumentsPage() {
                   <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <FileText className="size-5" />
                   </span>
+                  <div className="flex">
+                  <button aria-label="Modifier" onClick={() => setEdit(d)} className="rounded-md p-2 text-muted-foreground hover:bg-accent"><Pencil className="size-4" /></button>
+                  <button aria-label="Supprimer" onClick={() => { if (confirm("Supprimer ce document ?")) { setDocs(docs.filter((x) => x.id !== d.id)); toast.success("Document supprimé"); } }} className="rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-primary"><Trash2 className="size-4" /></button>
                   <button
                     aria-label={fav ? "Retirer des favoris" : "Ajouter aux favoris"}
                     onClick={() => {
@@ -195,6 +206,7 @@ function DocumentsPage() {
                   >
                     <Bookmark className={cn("size-4", fav && "fill-current")} />
                   </button>
+                  </div>
                 </div>
                 <p className="mt-4 text-xs uppercase tracking-wider text-muted-foreground">
                   {d.category}
@@ -264,6 +276,11 @@ function DocumentsPage() {
           </div>
         </DialogContent>
       </Dialog>
+      {edit && (
+        <EditDialog title={edit.id ? "Modifier le document" : "Ajouter un document"} value={edit} onClose={() => setEdit(null)}
+          fields={[{ key: "title", label: "Titre", required: true }, { key: "category", label: "Catégorie", type: "select", options: cats }, { key: "description", label: "Description", type: "textarea" }, { key: "date", label: "Date", type: "date" }, { key: "format", label: "Format" }, { key: "size", label: "Taille" }, { key: "pages", label: "Pages", type: "number" }]}
+          onSave={(v) => { if (v.id) setDocs(docs.map((x) => (x.id === v.id ? v : x))); else setDocs([{ ...v, id: `doc-${Date.now()}` }, ...docs]); toast.success(v.id ? "Document modifié" : "Document ajouté"); setEdit(null); }} />
+      )}
     </div>
   );
 }

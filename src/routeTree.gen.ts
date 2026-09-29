@@ -17,6 +17,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as InformationsRouteImport } from './routes/informations'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QualificationRouteImport } from './routes/qualification'
+import { Route as RapportsRouteImport } from './routes/rapports'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const QualificationRoute = QualificationRouteImport.update({
   path: '/qualification',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RapportsRoute = RapportsRouteImport.update({
+  id: '/rapports',
+  path: '/rapports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   InformationsRoute: typeof InformationsRoute
   LoginRoute: typeof LoginRoute
   QualificationRoute: typeof QualificationRoute
+  RapportsRoute: typeof RapportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QualificationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rapports': {
+      id: '/rapports'
+      path: '/rapports'
+      fullPath: '/rapports'
+      preLoaderRoute: typeof RapportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   InformationsRoute: InformationsRoute,
   LoginRoute: LoginRoute,
   QualificationRoute: QualificationRoute,
+  RapportsRoute: RapportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

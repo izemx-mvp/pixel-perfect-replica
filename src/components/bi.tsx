@@ -71,11 +71,11 @@ export function Kpi({
 }: {
   label: string;
   value: string;
-  current?: number;
-  prev?: number;
+  current?: number | undefined;
+  prev?: number | undefined;
   hint: string;
-  invert?: boolean;
-  suffix?: string;
+  invert?: boolean | undefined;
+  suffix?: string | undefined;
 }) {
   const evo = prev && current !== undefined ? ((current - prev) / prev) * 100 : null;
   const good = evo === null ? true : invert ? evo <= 0 : evo >= 0;

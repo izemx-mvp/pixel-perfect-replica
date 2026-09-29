@@ -16,7 +16,7 @@ import {
   LogOut,
   Mail,
   BarChart3,
-  Database,
+  LayoutDashboard,
   Sparkles,
   Moon,
   Search,
@@ -53,8 +53,8 @@ import { DOCUMENTS, FAQS, LOCATIONS } from "@/data/content";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/analyse", label: "Analyse & Reporting", short: "Analyse", icon: BarChart3, match: ["/analyse"] },
-  { to: "/consolidation", label: "Consolidation", short: "Données", icon: Database, match: ["/consolidation"] },
+  { to: "/", label: "Dashboard", short: "Accueil", icon: LayoutDashboard, match: ["/"] },
+  { to: "/rapports", label: "Rapports & Analyse", short: "Rapports", icon: BarChart3, match: ["/rapports"] },
   { to: "/faq", label: "Service Client", short: "Service", icon: BookOpen, match: ["/faq", "/documents", "/informations"] },
   { to: "/qualification", label: "Qualification IA", short: "IA", icon: Sparkles, match: ["/qualification"] },
 ] as const;
@@ -206,7 +206,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
           <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between gap-4 px-4 sm:px-6">
-            <Link to="/analyse" aria-label="Accueil">
+            <Link to="/" aria-label="Accueil">
               <Logo size="sm" />
             </Link>
 

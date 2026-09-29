@@ -41,8 +41,8 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const { login, authed, ready } = useApp();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(DEMO_EMAIL);
+  const [password, setPassword] = useState(DEMO_PASSWORD);
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "success">("idle");

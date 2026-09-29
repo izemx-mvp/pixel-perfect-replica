@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Pencil, Plus, RotateCcw, Search, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { EditDialog, useStored } from "@/lib/editable";
+import type { Faq } from "@/data/content";
 import { ServiceClientTabs } from "@/components/ServiceClientTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -38,15 +41,18 @@ function FaqPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("Tous");
   const [open, setOpen] = useState<string | null>(null);
+  const [faqs, setFaqs, resetFaqs] = useStored<Faq[]>("rd_faqs", FAQS);
+  const [edit, setEdit] = useState<Faq | null>(null);
+  const cats = FAQ_CATEGORIES.filter((c) => c !== "Tous");
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return FAQS.filter(
+    return faqs.filter(
       (f) =>
         (category === "Tous" || f.category === category) &&
         (!q || (f.question + f.answer).toLowerCase().includes(q)),
     );
-  }, [query, category]);
+  }, [query, category, faqs]);
 
   return (
     <div className="space-y-8">
@@ -56,6 +62,10 @@ function FaqPage() {
         <p className="mt-2 text-muted-foreground">
           Trouvez rapidement une réponse à vos questions techniques et commerciales.
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button onClick={() => setEdit({ id: "", question: "", answer: "", category: cats[0]! })}><Plus className="size-4" /> Ajouter une question</Button>
+          <Button variant="outline" onClick={() => { resetFaqs(); toast.success("FAQ réinitialisée"); }}><RotateCcw className="size-4" /> Réinitialiser</Button>
+        </div>
       </header>
 
       <div className="space-y-4">
@@ -125,15 +135,24 @@ function FaqPage() {
                   style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                 >
                   <div className="overflow-hidden">
-                    <p className="border-t border-border px-5 py-4 text-sm text-muted-foreground">
+                    <p className="whitespace-pre-line border-t border-border px-5 py-4 text-sm text-muted-foreground">
                       {f.answer}
                     </p>
+                    <div className="flex gap-2 px-5 pb-4">
+                      <Button size="sm" variant="outline" onClick={() => setEdit(f)}><Pencil className="size-3.5" /> Modifier</Button>
+                      <Button size="sm" variant="outline" className="text-primary" onClick={() => { if (confirm("Supprimer cette question ?")) { setFaqs(faqs.filter((x) => x.id !== f.id)); toast.success("Question supprimée"); } }}><Trash2 className="size-3.5" /> Supprimer</Button>
+                    </div>
                   </div>
                 </div>
               </li>
             );
           })}
         </ul>
+      )}
+      {edit && (
+        <EditDialog title={edit.id ? "Modifier la question" : "Ajouter une question"} value={edit} onClose={() => setEdit(null)}
+          fields={[{ key: "question", label: "Question", required: true }, { key: "answer", label: "Réponse", type: "textarea", required: true }, { key: "category", label: "Catégorie", type: "select", options: cats }]}
+          onSave={(v) => { if (v.id) setFaqs(faqs.map((x) => (x.id === v.id ? v : x))); else setFaqs([{ ...v, id: `faq-${Date.now()}` }, ...faqs]); toast.success(v.id ? "Question modifiée" : "Question ajoutée"); setEdit(null); }} />
       )}
     </div>
   );

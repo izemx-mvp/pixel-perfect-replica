@@ -37,20 +37,24 @@ function useOpenStatus() {
     const idx = (now.getDay() + 6) % 7; // 0 = Lundi
     const today = OPENING_HOURS[idx];
     const minutes = now.getHours() * 60 + now.getMinutes();
-    const isOpen = today.slots.some((s) => {
-      const [start, end] = s.split("–");
-      const toMin = (t: string) => {
-        const [h, m] = t.split(":").map(Number);
-        return h * 60 + m;
-      };
-      return minutes >= toMin(start) && minutes <= toMin(end);
-    });
+    const toMin = (t: string) => {
+      const [h, m] = t.split(":");
+      return Number(h) * 60 + Number(m);
+    };
+    const isOpen = Boolean(
+      today?.slots.some((s) => {
+        const [start, end] = s.split("–");
+        if (!start || !end) return false;
+        return minutes >= toMin(start) && minutes <= toMin(end);
+      }),
+    );
     return { todayIndex: idx, isOpen };
   }, []);
 }
 
 function InfosPage() {
-  const [locationId, setLocationId] = useState(LOCATIONS[0].id);
+  const [locationId, setLocationId] = useState(LOCATIONS[0]!.id);
+
   const location = LOCATIONS.find((l) => l.id === locationId)!;
   const { todayIndex, isOpen } = useOpenStatus();
 

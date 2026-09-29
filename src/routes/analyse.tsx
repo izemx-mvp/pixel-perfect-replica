@@ -234,7 +234,7 @@ function AnalysePage() {
               ["insights", "Insights IA"],
               ["report", "Rapport IA"],
             ].map(([v, l]) => (
-              <TabsTrigger key={v} value={v} className="rounded-full border border-border px-4 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger key={v} value={v!} className="rounded-full border border-border px-4 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 {l}
               </TabsTrigger>
             ))}
@@ -312,7 +312,7 @@ function FilterSelect({ label, value, onChange, options, noAll }: { label: strin
         <SelectContent>
           {!noAll && <SelectItem value="all">Tous</SelectItem>}
           {options.map(([v, l]) => (
-            <SelectItem key={v} value={v!}>{l}</SelectItem>
+            <SelectItem key={v} value={v ?? ""}>{l}</SelectItem>
           ))}
         </SelectContent>
       </Select>
@@ -719,7 +719,7 @@ function Demand({ sales, prevSales, offers, prevOffers }: { sales: SaleRecord[];
   const prevAll = [...prevSales, ...prevOffers];
   const refs = groupSum(all, (x) => x.reference, () => 1);
   const max = refs[0]?.value ?? 1;
-  const repeated = groupSum(all, (x) => x.company + "|" + x.reference, () => 1).filter((x) => x.value >= 3).length;
+  const repeated = groupSum(all, (x) => ("company" in x ? x.company : x.client) + "|" + x.reference, () => 1).filter((x) => x.value >= 3).length;
   const monthly = groupSum(all, (x) => x.date.slice(0, 7), () => 1).sort((a, b) => a.name.localeCompare(b.name)).map((m) => ({ name: labelOf(m.name, "month"), Demandes: m.value }));
   const bySector = groupSum(all, (x) => x.sector, () => 1);
   const byCom = groupSum(all, (x) => x.commercial, () => 1);

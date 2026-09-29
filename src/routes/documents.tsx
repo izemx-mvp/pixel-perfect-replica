@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Bookmark, Download, Eye, FileText, Loader2, Search } from "lucide-react";
+import { ServiceClientTabs } from "@/components/ServiceClientTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,7 @@ export const Route = createFileRoute("/documents")({
   }),
   component: () => (
     <AppShell>
+      <ServiceClientTabs />
       <DocumentsPage />
     </AppShell>
   ),

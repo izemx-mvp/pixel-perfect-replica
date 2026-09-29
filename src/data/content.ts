@@ -96,9 +96,9 @@ export const FAQS: Faq[] = [
   },
   {
     id: "faq-12",
-    question: "Puis-je suivre mes demandes dans cet espace ?",
+    question: "Comment qualifier rapidement un besoin en pièce ?",
     answer:
-      "Oui, chaque demande qualifiée apparaît dans « Mes demandes » avec sa référence, son statut et son historique.",
+      "Utilisez l'interface Qualification IA : décrivez le besoin, la machine et la quantité, et l'assistant identifie les informations manquantes.",
     category: "Disponibilité",
   },
 ];

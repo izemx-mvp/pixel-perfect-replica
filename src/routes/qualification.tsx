@@ -71,7 +71,7 @@ function qualify(f: Form, photo: boolean): Result {
 function QualificationPage() {
   const [f, setF] = useState<Form>(EMPTY);
   const [photo, setPhoto] = useState<{ url: string; name: string } | null>(null);
-  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof Form, boolean>>>({});
   const [phase, setPhase] = useState<"form" | "processing" | "result">("form");
   const [step, setStep] = useState(0);
   const [result, setResult] = useState<Result | null>(null);
@@ -81,7 +81,7 @@ function QualificationPage() {
 
   const submit = () => {
     const req: (keyof Form)[] = ["nom", "email", "produit", "description"];
-    const e: Record<string, boolean> = {};
+    const e: Partial<Record<keyof Form, boolean>> = {};
     req.forEach((k) => { if (!f[k].trim()) e[k] = true; });
     if (f.email && !/^\S+@\S+\.\S+$/.test(f.email)) e.email = true;
     setErrors(e);
@@ -250,7 +250,7 @@ function QualificationPage() {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: boolean; children: React.ReactNode }) {
+function Field({ label, error, children }: { label: string; error?: boolean | undefined; children: React.ReactNode }) {
   return (
     <div className={cn("space-y-1.5", error && "[&_input]:border-destructive [&_textarea]:border-destructive [&_button[role=combobox]]:border-destructive")}>
       <Label className={cn(error && "text-destructive")}>{label}</Label>

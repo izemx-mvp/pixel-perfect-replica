@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Clock, ExternalLink, Facebook, Linkedin, MapPin, Phone } from "lucide-react";
+import { ServiceClientTabs } from "@/components/ServiceClientTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { LOCATIONS, OPENING_HOURS } from "@/data/content";
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/informations")({
   }),
   component: () => (
     <AppShell>
+      <ServiceClientTabs />
       <InfosPage />
     </AppShell>
   ),

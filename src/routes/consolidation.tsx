@@ -185,7 +185,7 @@ function ConsolidationPage() {
             ["offers", "Offres"],
             ["review", `À vérifier (${open})`],
           ].map(([v, l]) => (
-            <TabsTrigger key={v} value={v} className="rounded-full border border-border px-4 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger key={v} value={v!} className="rounded-full border border-border px-4 data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               {l}
             </TabsTrigger>
           ))}

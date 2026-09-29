@@ -9,9 +9,7 @@ import {
 } from "react";
 import {
   DEFAULT_NOTIFICATIONS,
-  DEMO_REQUESTS,
   type NotificationItem,
-  type PartRequest,
 } from "@/data/content";
 
 export const DEMO_EMAIL = "client@rousseaudistribution.ma";
@@ -32,7 +30,6 @@ const K = {
   notifsEnabled: "rd_notifs_enabled",
   notifications: "rd_notifications",
   favorites: "rd_favorites",
-  requests: "rd_requests",
 };
 
 function read<T>(key: string, fallback: T): T {
@@ -71,8 +68,6 @@ type Store = {
   markAllRead: () => void;
   favorites: string[];
   toggleFavorite: (id: string) => boolean;
-  requests: PartRequest[];
-  addRequest: (r: PartRequest) => void;
 };
 
 const AppStore = createContext<Store | null>(null);
@@ -85,7 +80,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [notifsEnabled, setNotifsEnabledState] = useState(true);
   const [notifications, setNotifications] = useState<NotificationItem[]>(DEFAULT_NOTIFICATIONS);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [requests, setRequests] = useState<PartRequest[]>(DEMO_REQUESTS);
 
   useEffect(() => {
     setAuthed(read<boolean>(K.session, false));
@@ -96,7 +90,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setNotifsEnabledState(read<boolean>(K.notifsEnabled, true));
     setNotifications(read<NotificationItem[]>(K.notifications, DEFAULT_NOTIFICATIONS));
     setFavorites(read<string[]>(K.favorites, []));
-    setRequests(read<PartRequest[]>(K.requests, DEMO_REQUESTS));
     setReady(true);
   }, []);
 
@@ -160,13 +153,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     return added;
   }, []);
 
-  const addRequest = useCallback((r: PartRequest) => {
-    setRequests((prev) => {
-      const next = [r, ...prev];
-      write(K.requests, next);
-      return next;
-    });
-  }, []);
 
   const unread = notifications.filter((n) => !n.read).length;
 
@@ -188,8 +174,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       markAllRead,
       favorites,
       toggleFavorite,
-      requests,
-      addRequest,
     }),
     [
       ready,
@@ -208,8 +192,6 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       markAllRead,
       favorites,
       toggleFavorite,
-      requests,
-      addRequest,
     ],
   );
 

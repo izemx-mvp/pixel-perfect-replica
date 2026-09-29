@@ -53,7 +53,7 @@ function LoginPage() {
   const [forgotError, setForgotError] = useState("");
 
   useEffect(() => {
-    if (ready && authed) navigate({ to: "/" });
+    if (ready && authed) navigate({ to: "/analyse" });
   }, [ready, authed, navigate]);
 
   const submit = (e: React.FormEvent) => {
@@ -68,7 +68,7 @@ function LoginPage() {
       if (login(email, password)) {
         setState("success");
         toast.success("Connexion réussie");
-        window.setTimeout(() => navigate({ to: "/" }), 700);
+        window.setTimeout(() => navigate({ to: "/analyse" }), 700);
       } else {
         setState("idle");
         setError("Adresse e-mail ou mot de passe incorrect.");

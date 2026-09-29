@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useApp } from "@/lib/app-store";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { DOCUMENTS, FAQS, LOCATIONS } from "@/data/content";
 import { cn } from "@/lib/utils";
 
@@ -200,6 +201,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <ShellCtx.Provider value={{ openAI: () => navigate({ to: "/qualification" }) }}>
+    <TooltipProvider delayDuration={150}>
       <IndustrialBackground />
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
@@ -459,6 +461,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </DialogContent>
       </Dialog>
+    </TooltipProvider>
     </ShellCtx.Provider>
   );
 }

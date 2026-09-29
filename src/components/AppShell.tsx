@@ -15,6 +15,9 @@ import {
   Info,
   LogOut,
   Mail,
+  BarChart3,
+  Database,
+  Sparkles,
   Moon,
   Search,
   Settings,
@@ -23,7 +26,6 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { IndustrialBackground } from "@/components/IndustrialBackground";
-import { AIRequestModal } from "@/components/AIRequestModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,9 +52,10 @@ import { DOCUMENTS, FAQS, LOCATIONS } from "@/data/content";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/faq", label: "FAQ", short: "FAQ", icon: BookOpen },
-  { to: "/documents", label: "Documents", short: "Documents", icon: FileText },
-  { to: "/informations", label: "Informations générales", short: "Infos", icon: Info },
+  { to: "/analyse", label: "Analyse & Reporting", short: "Analyse", icon: BarChart3, match: ["/analyse"] },
+  { to: "/consolidation", label: "Consolidation", short: "Données", icon: Database, match: ["/consolidation"] },
+  { to: "/faq", label: "Service Client", short: "Service", icon: BookOpen, match: ["/faq", "/documents", "/informations"] },
+  { to: "/qualification", label: "Qualification IA", short: "IA", icon: Sparkles, match: ["/qualification"] },
 ] as const;
 
 type Shell = { openAI: () => void };
@@ -70,7 +73,6 @@ function formatDate(iso: string) {
 function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  const { requests } = useApp();
 
   const q = query.trim().toLowerCase();
   const results = useMemo(() => {
@@ -85,13 +87,8 @@ function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
     LOCATIONS.filter((l) => (l.name + l.address + l.city).toLowerCase().includes(q)).forEach((l) =>
       out.push({ label: `Agence ${l.name} — ${l.address}`, hint: "Informations", to: "/informations" }),
     );
-    requests
-      .filter((r) => (r.reference + r.description + r.type + r.brand).toLowerCase().includes(q))
-      .forEach((r) =>
-        out.push({ label: `${r.reference} — ${r.type}`, hint: "Demande IA", to: "/demandes" }),
-      );
     return out.slice(0, 12);
-  }, [q, requests]);
+  }, [q]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -164,8 +161,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   } = useApp();
 
   const [searchOpen, setSearchOpen] = useState(false);
-  const [aiOpen, setAiOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
   const [prefsOpen, setPrefsOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const [draft, setDraft] = useState(profile);
@@ -203,12 +199,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ShellCtx.Provider value={{ openAI: () => setAiOpen(true) }}>
+    <ShellCtx.Provider value={{ openAI: () => navigate({ to: "/qualification" }) }}>
       <IndustrialBackground />
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
-          <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-            <Link to="/" aria-label="Accueil Service Client">
+          <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between gap-4 px-4 sm:px-6">
+            <Link to="/analyse" aria-label="Accueil">
               <Logo size="sm" />
             </Link>
 
@@ -219,24 +215,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                   to={n.to}
                   className={cn(
                     "relative rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
-                    pathname === n.to ? "text-primary" : "text-muted-foreground",
+                    (n.match as readonly string[]).includes(pathname) ? "text-primary" : "text-muted-foreground",
                   )}
                 >
                   {n.label}
-                  {pathname === n.to && (
+                  {(n.match as readonly string[]).includes(pathname) && (
                     <span className="absolute inset-x-3 -bottom-[5px] h-[2px] rounded-full bg-primary" />
                   )}
                 </Link>
               ))}
-              <Link
-                to="/demandes"
-                className={cn(
-                  "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-primary",
-                  pathname === "/demandes" ? "text-primary" : "text-muted-foreground",
-                )}
-              >
-                Mes demandes
-              </Link>
             </nav>
 
             <div className="flex items-center gap-1">
@@ -301,18 +288,6 @@ export function AppShell({ children }: { children: ReactNode }) {
                       </button>
                     ))}
                   </div>
-                  <div className="border-t border-border p-2">
-                    <Button
-                      variant="ghost"
-                      className="w-full"
-                      onClick={() => {
-                        setBellOpen(false);
-                        navigate({ to: "/notifications" });
-                      }}
-                    >
-                      Voir toutes les notifications
-                    </Button>
-                  </div>
                 </PopoverContent>
               </Popover>
 
@@ -334,7 +309,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <DropdownMenuItem onSelect={() => setProfileOpen(true)}>
                     <User className="size-4" /> Mon profil
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => navigate({ to: "/notifications" })}>
+                  <DropdownMenuItem onSelect={() => setTimeout(() => setBellOpen(true), 50)}>
                     <Bell className="size-4" /> Notifications
                   </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => setPrefsOpen(true)}>
@@ -356,12 +331,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-8 sm:px-6 md:pb-16">
+        <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-28 pt-8 sm:px-6 md:pb-16">
           {children}
         </main>
 
         <footer className="border-t border-border bg-card/60 py-8">
-          <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 text-center sm:px-6">
+          <div className="mx-auto flex max-w-[1400px] flex-col items-center gap-3 px-4 text-center sm:px-6">
             <Logo size="sm" />
             <p className="text-xs text-muted-foreground">
               La force de vos machines, notre engagement — Partenaire de la fourniture industrielle
@@ -380,26 +355,18 @@ export function AppShell({ children }: { children: ReactNode }) {
                 to={n.to}
                 className={cn(
                   "flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium",
-                  pathname === n.to ? "text-primary" : "text-muted-foreground",
+                  (n.match as readonly string[]).includes(pathname) ? "text-primary" : "text-muted-foreground",
                 )}
               >
                 <n.icon className="size-4" />
                 {n.short}
               </Link>
             ))}
-            <button
-              onClick={() => setAiOpen(true)}
-              className="flex flex-col items-center gap-1 py-2.5 text-[11px] font-medium text-primary"
-            >
-              <Mail className="size-4" />
-              Pièce IA
-            </button>
           </div>
         </nav>
       </div>
 
       <GlobalSearch open={searchOpen} onOpenChange={setSearchOpen} />
-      <AIRequestModal open={aiOpen} onOpenChange={setAiOpen} />
 
       <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
         <DialogContent className="max-w-md">

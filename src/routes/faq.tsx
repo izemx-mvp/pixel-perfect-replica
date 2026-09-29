@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ChevronDown, Search } from "lucide-react";
+import { ServiceClientTabs } from "@/components/ServiceClientTabs";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/faq")({
   }),
   component: () => (
     <AppShell>
+      <ServiceClientTabs />
       <FaqPage />
     </AppShell>
   ),

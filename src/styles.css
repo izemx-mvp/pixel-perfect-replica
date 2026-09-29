@@ -102,6 +102,7 @@
 
   --gradient-steel: linear-gradient(135deg, oklch(0.99 0 0), oklch(0.94 0.004 250));
   --gradient-red: linear-gradient(120deg, oklch(0.53 0.21 27.5), oklch(0.62 0.19 33));
+  --gradient-metal-bg: radial-gradient(120% 80% at 80% 0%, oklch(0.93 0.004 250), transparent 60%), linear-gradient(180deg, oklch(0.96 0.003 250), oklch(0.9 0.006 250));
   --shadow-panel: 0 1px 2px oklch(0.21 0.008 250 / 6%), 0 18px 40px -24px oklch(0.21 0.008 250 / 28%);
   --shadow-lift: 0 2px 4px oklch(0.21 0.008 250 / 8%), 0 28px 56px -28px oklch(0.53 0.21 27.5 / 32%);
 }
@@ -143,6 +144,7 @@
 
   --gradient-steel: linear-gradient(135deg, oklch(0.24 0.008 250), oklch(0.19 0.007 250));
   --gradient-red: linear-gradient(120deg, oklch(0.55 0.21 27), oklch(0.66 0.19 33));
+  --gradient-metal-bg: radial-gradient(120% 80% at 80% 0%, oklch(0.28 0.008 250), transparent 60%), linear-gradient(180deg, oklch(0.16 0.006 250), oklch(0.12 0.005 250));
   --shadow-panel: 0 1px 2px oklch(0 0 0 / 40%), 0 18px 40px -24px oklch(0 0 0 / 70%);
   --shadow-lift: 0 2px 4px oklch(0 0 0 / 45%), 0 28px 56px -28px oklch(0.62 0.21 28 / 40%);
 }

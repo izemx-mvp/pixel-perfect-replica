@@ -42,7 +42,7 @@ export function Panel({
   subtitle?: string;
   action?: ReactNode;
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <section className={cn("rounded-xl p-5 panel", className)}>

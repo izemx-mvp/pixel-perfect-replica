@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyseRouteImport } from './routes/analyse'
-import { Route as ConsolidationRouteImport } from './routes/consolidation'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as InformationsRouteImport } from './routes/informations'
@@ -27,11 +26,6 @@ const IndexRoute = IndexRouteImport.update({
 const AnalyseRoute = AnalyseRouteImport.update({
   id: '/analyse',
   path: '/analyse',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConsolidationRoute = ConsolidationRouteImport.update({
-  id: '/consolidation',
-  path: '/consolidation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocumentsRoute = DocumentsRouteImport.update({
@@ -68,7 +62,6 @@ const RapportsRoute = RapportsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
@@ -79,7 +72,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
@@ -91,7 +83,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
@@ -104,7 +95,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
@@ -115,7 +105,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
@@ -126,7 +115,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
@@ -138,7 +126,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyseRoute: typeof AnalyseRoute
-  ConsolidationRoute: typeof ConsolidationRoute
   DocumentsRoute: typeof DocumentsRoute
   FaqRoute: typeof FaqRoute
   InformationsRoute: typeof InformationsRoute
@@ -161,13 +148,6 @@ declare module '@tanstack/react-router' {
       path: '/analyse'
       fullPath: '/analyse'
       preLoaderRoute: typeof AnalyseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/consolidation': {
-      id: '/consolidation'
-      path: '/consolidation'
-      fullPath: '/consolidation'
-      preLoaderRoute: typeof ConsolidationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/documents': {
@@ -218,7 +198,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyseRoute: AnalyseRoute,
-  ConsolidationRoute: ConsolidationRoute,
   DocumentsRoute: DocumentsRoute,
   FaqRoute: FaqRoute,
   InformationsRoute: InformationsRoute,

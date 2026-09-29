@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Bot, Check, ImagePlus, Loader2, Sparkles, Trash2, X } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Bot, Check, ImagePlus, Loader2, Sparkles, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,10 +139,13 @@ export function AIRequestModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        showCloseButton={false}
-        className="max-h-[92vh] max-w-3xl overflow-y-auto p-0 sm:rounded-lg"
-      >
+      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto p-0 sm:rounded-lg">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Recherche de pièce assistée par IA</DialogTitle>
+          <DialogDescription>
+            Décrivez votre besoin et notre assistant vous aidera à préciser votre demande.
+          </DialogDescription>
+        </DialogHeader>
         <div className="relative overflow-hidden border-b border-border px-6 py-5 surface-steel">
           <div className="pointer-events-none absolute inset-0 opacity-40">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full border-2 border-primary/30 border-dashed" />
@@ -144,16 +153,13 @@ export function AIRequestModal({
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-kicker">Agent Service Client IA</p>
-              <h2 className="mt-1 text-xl font-bold sm:text-2xl">
+              <h2 className="mt-1 pr-8 text-xl font-bold sm:text-2xl">
                 Recherche de pièce assistée par IA
               </h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Décrivez votre besoin et notre assistant vous aidera à préciser votre demande.
               </p>
             </div>
-            <Button variant="ghost" size="icon" onClick={() => onOpenChange(false)} aria-label="Fermer">
-              <X className="size-4" />
-            </Button>
           </div>
         </div>
 

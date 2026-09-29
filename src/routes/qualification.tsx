@@ -178,7 +178,7 @@ function EditDialog({ lead, onClose, onSave }: { lead: Lead | null; onClose: () 
   const [f, setF] = useState(lead ?? { ...EMPTY, id: "", date: "", stage: "Nouveau contact" as Stage, score: 0 });
   const set = (k: keyof Lead, v: string) => setF({ ...f, [k]: v });
   const save = () => {
-    if (!f.nom.trim() || !f.telephone.trim() || !f.message.trim()) return toast.error("Veuillez compléter les informations nécessaires.");
+    if (!f.nom.trim() || !f.telephone.trim() || !f.message.trim()) { toast.error("Veuillez compléter les informations nécessaires."); return; }
     onSave({ ...f, id: f.id || `WA-${Math.floor(3000 + Math.random() * 6000)}`, date: f.date || new Date().toISOString(), score: scoreLead(f) });
   };
   const T = ({ k, label, req }: { k: keyof Lead; label: string; req?: boolean }) => (

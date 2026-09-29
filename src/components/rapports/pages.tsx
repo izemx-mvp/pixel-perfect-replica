@@ -131,7 +131,7 @@ function repStats(repId: string, s: ReturnType<typeof scoped>) {
   const sales = s.sales.filter((x) => x.repId === repId), visits = s.visits.filter((x) => x.repId === repId), offers = s.offers.filter((x) => x.repId === repId);
   return { sales, visits, offers, ca: sum(sales), conv: convRate(offers) };
 }
-export function Commerciaux({ id }: { id?: string }) {
+export function Commerciaux({ id }: { id?: string | undefined }) {
   const { cur, filters, match } = useScope();
   const { go } = useR();
   if (id) return <RepDetail id={id} />;
@@ -219,7 +219,7 @@ function RepDetail({ id }: { id: string }) {
 }
 
 /* ---------------- VISITES ---------------- */
-export function Visites({ id }: { id?: string }) {
+export function Visites({ id }: { id?: string | undefined }) {
   const { cur, match } = useScope();
   const { go } = useR();
   const [client, setClient] = useState("all");
@@ -272,7 +272,7 @@ function VisitDetail({ id }: { id: string }) {
 }
 
 /* ---------------- PRODUITS ---------------- */
-export function Produits({ id }: { id?: string }) {
+export function Produits({ id }: { id?: string | undefined }) {
   const { cur, match } = useScope();
   const { go, showRows } = useR();
   if (id) return <RefDetail code={id} />;
@@ -326,7 +326,7 @@ function RefDetail({ code }: { code: string }) {
 }
 
 /* ---------------- CLIENTS ---------------- */
-export function Clients({ id }: { id?: string }) {
+export function Clients({ id }: { id?: string | undefined }) {
   const { cur, match } = useScope();
   const { go, filters } = { ...useR(), filters: useR().filters };
   if (id) return <ClientDetail id={id} />;

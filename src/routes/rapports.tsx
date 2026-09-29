@@ -12,12 +12,12 @@ import { Accueil, Clients, Commerciaux, Offres, Produits, Stock, Ventes, Visites
 import { Assistant, CustomReport, Historique } from "@/components/rapports/ai";
 import { cn } from "@/lib/utils";
 
-type S = { vue?: string; id?: string; prompt?: string };
+type S = { vue?: string | undefined; id?: string | undefined; prompt?: string | undefined };
 export const Route = createFileRoute("/rapports")({
   validateSearch: (s: Record<string, unknown>): S => ({
-    vue: typeof s.vue === "string" ? s.vue : undefined,
-    id: typeof s.id === "string" ? s.id : undefined,
-    prompt: typeof s.prompt === "string" ? s.prompt : undefined,
+    vue: typeof s["vue"] === "string" ? s["vue"] : undefined,
+    id: typeof s["id"] === "string" ? s["id"] : undefined,
+    prompt: typeof s["prompt"] === "string" ? s["prompt"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -48,7 +48,7 @@ const MENU = [
 function RapportsPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const go = (vue: string, id?: string, prompt?: string) => navigate({ to: "/rapports", search: { vue, id, prompt } });
+  const go = (vue: string, id?: string | undefined, prompt?: string) => navigate({ to: "/rapports", search: { vue, id, prompt } });
   return (
     <AppShell>
       <RapportsProvider go={go}>
@@ -58,7 +58,7 @@ function RapportsPage() {
   );
 }
 
-function Inner({ vue, id, prompt }: { vue: string; id?: string; prompt?: string }) {
+function Inner({ vue, id, prompt }: { vue: string; id?: string | undefined; prompt?: string | undefined }) {
   const { filters, setFilters, q, setQ, go } = useR();
   const [ai, setAi] = useState(true);
   const view = {

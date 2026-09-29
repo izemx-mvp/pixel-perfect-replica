@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export type Rows = { title: string; head: string[]; rows: (string | number)[][] };
 type Ctx = {
   filters: Filters; setFilters: (f: Filters) => void; q: string; setQ: (s: string) => void;
-  showRows: (r: Rows) => void; go: (vue: string, id?: string, prompt?: string) => void;
+  showRows: (r: Rows) => void; go: (vue: string, id?: string | undefined, prompt?: string) => void;
 };
 export const RapportsCtx = createContext<Ctx | null>(null);
 export const useR = () => useContext(RapportsCtx)!;

@@ -17,7 +17,7 @@ export type Report = {
   title: string; period: string; kpis: { label: string; value: string }[]; head: string[]; rows: (string | number)[][];
   chart: { name: string; value: number }[]; summary: string[]; recs: string[];
 };
-type Opts = { period: number; sector: string; rep: string; top?: number; compare?: boolean };
+type Opts = { period: number; sector: string; rep: string; top?: number | undefined; compare?: boolean | undefined };
 
 export function interpret(prompt: string, base: { period: number; sector: string; rep: string }): Opts & { rephrase: string } {
   const p = prompt.toLowerCase();
@@ -112,7 +112,7 @@ export function ReportView({ rep }: { rep: Report }) {
 
 const EXAMPLES = ["Ventes du secteur pharmaceutique ce trimestre, par commercial", "Références demandées par plus de 3 clients et leur stock disponible", "Offres en attente depuis plus de 30 jours"];
 
-export function CustomReport({ initialPrompt }: { initialPrompt?: string }) {
+export function CustomReport({ initialPrompt }: { initialPrompt?: string | undefined }) {
   const { filters } = useR();
   const [prompt, setPrompt] = useState(initialPrompt ?? "");
   const [sel, setSel] = useState({ period: filters.period, sector: filters.sector, rep: filters.rep, product: "all", client: "all" });
@@ -127,7 +127,7 @@ export function CustomReport({ initialPrompt }: { initialPrompt?: string }) {
   useEffect(() => { if (initialPrompt) { setPrompt(initialPrompt); setStage("input"); } }, [initialPrompt]);
 
   const submit = () => {
-    if (!prompt.trim()) return toast.error("Veuillez saisir une recherche.");
+    if (!prompt.trim()) { toast.error("Veuillez saisir une recherche."); return; }
     setOpts(interpret(prompt, sel)); setStage("confirm");
   };
   const validate = () => {
@@ -205,7 +205,7 @@ export function CustomReport({ initialPrompt }: { initialPrompt?: string }) {
             <Select value={freq} onValueChange={setFreq}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="hebdomadaire">Hebdomadaire</SelectItem><SelectItem value="mensuel">Mensuel</SelectItem></SelectContent></Select>
           )}
           <p className="text-xs text-muted-foreground">Simulation dans cet espace de démonstration.</p>
-          <DialogFooter><Button onClick={() => { if (dlg === "email" && !/\S+@\S+\.\S+/.test(email)) return toast.error("Adresse e-mail invalide"); toast.success(dlg === "email" ? `Envoi simulé à ${email}` : `Rapport planifié (${freq})`); setDlg(null); }}>Confirmer</Button></DialogFooter>
+          <DialogFooter><Button onClick={() => { if (dlg === "email" && !/\S+@\S+\.\S+/.test(email)) { toast.error("Adresse e-mail invalide"); return; } toast.success(dlg === "email" ? `Envoi simulé à ${email}` : `Rapport planifié (${freq})`); setDlg(null); }}>Confirmer</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
@@ -214,7 +214,7 @@ export function CustomReport({ initialPrompt }: { initialPrompt?: string }) {
 
 /* ---------- ASSISTANT ---------- */
 type Msg = { role: "user" | "ai"; text: string; table?: (string | number)[][]; chart?: { name: string; value: number }[]; q?: string };
-function answer(q: string, ctx: { intent: string; shift: number; ref?: string }) {
+function answer(q: string, ctx: { intent: string; shift: number; ref?: string | undefined }) {
   const p = q.toLowerCase();
   let intent = ctx.intent, shift = 0, ref = ctx.ref;
   if (/précédent|precedent|avant/.test(p) && intent) shift = ctx.shift + 30;

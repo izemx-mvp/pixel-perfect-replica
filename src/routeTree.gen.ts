@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyseRouteImport } from './routes/analyse'
-import { Route as ConsolidationRouteImport } from './routes/consolidation'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as InformationsRouteImport } from './routes/informations'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as QualificationRouteImport } from './routes/qualification'
+import { Route as RapportsRouteImport } from './routes/rapports'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,11 +26,6 @@ const IndexRoute = IndexRouteImport.update({
 const AnalyseRoute = AnalyseRouteImport.update({
   id: '/analyse',
   path: '/analyse',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConsolidationRoute = ConsolidationRouteImport.update({
-  id: '/consolidation',
-  path: '/consolidation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocumentsRoute = DocumentsRouteImport.update({
@@ -58,80 +53,85 @@ const QualificationRoute = QualificationRouteImport.update({
   path: '/qualification',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RapportsRoute = RapportsRouteImport.update({
+  id: '/rapports',
+  path: '/rapports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/analyse': typeof AnalyseRoute
-  '/consolidation': typeof ConsolidationRoute
   '/documents': typeof DocumentsRoute
   '/faq': typeof FaqRoute
   '/informations': typeof InformationsRoute
   '/login': typeof LoginRoute
   '/qualification': typeof QualificationRoute
+  '/rapports': typeof RapportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   id:
     | '__root__'
     | '/'
     | '/analyse'
-    | '/consolidation'
     | '/documents'
     | '/faq'
     | '/informations'
     | '/login'
     | '/qualification'
+    | '/rapports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyseRoute: typeof AnalyseRoute
-  ConsolidationRoute: typeof ConsolidationRoute
   DocumentsRoute: typeof DocumentsRoute
   FaqRoute: typeof FaqRoute
   InformationsRoute: typeof InformationsRoute
   LoginRoute: typeof LoginRoute
   QualificationRoute: typeof QualificationRoute
+  RapportsRoute: typeof RapportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,13 +148,6 @@ declare module '@tanstack/react-router' {
       path: '/analyse'
       fullPath: '/analyse'
       preLoaderRoute: typeof AnalyseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/consolidation': {
-      id: '/consolidation'
-      path: '/consolidation'
-      fullPath: '/consolidation'
-      preLoaderRoute: typeof ConsolidationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/documents': {
@@ -192,18 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QualificationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rapports': {
+      id: '/rapports'
+      path: '/rapports'
+      fullPath: '/rapports'
+      preLoaderRoute: typeof RapportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyseRoute: AnalyseRoute,
-  ConsolidationRoute: ConsolidationRoute,
   DocumentsRoute: DocumentsRoute,
   FaqRoute: FaqRoute,
   InformationsRoute: InformationsRoute,
   LoginRoute: LoginRoute,
   QualificationRoute: QualificationRoute,
+  RapportsRoute: RapportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
